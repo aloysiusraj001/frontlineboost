@@ -1,0 +1,9 @@
+fastapi
+pydantic
+pydantic-settings
+python-dotenv
+aiohttp
+httpx
+python-multipart
+assemblyai
+# uvicorn  # optional for local dev only; not required on Vercel
