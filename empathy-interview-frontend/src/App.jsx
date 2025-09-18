@@ -123,8 +123,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/train" element={<TrainingApp />} />
+        <Route path="/" element={<TrainingApp />} />
+        {/* Optionally keep /train as alias, or remove it */}
+        {/* <Route path="/train" element={<TrainingApp />} /> */}
       </Routes>
     </BrowserRouter>
   );
