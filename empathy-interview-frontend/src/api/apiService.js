@@ -4,6 +4,18 @@ const API_KEY = import.meta.env.VITE_API_KEY ?? 'secret123';
 
 const withKey = (headers = {}) => ({ 'X-API-Key': API_KEY, ...headers });
 
+async audioChatWithOpenAI(audioBlob, personaId) {
+  const formData = new FormData();
+  formData.append('file', audioBlob, 'recording.wav');
+  if (personaId) formData.append('persona_id', String(personaId));
+  const r = await fetch(`${API_BASE_URL}/audio/chat`, {
+    method: 'POST',
+    headers: withKey(),
+    body: formData
+  });
+  return asJson(r);
+}
+
 async function asJson(res) {
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -17,43 +29,7 @@ export const apiService = {
     const r = await fetch(`${API_BASE_URL}/persona/list`, { headers: withKey() });
     return asJson(r);
   },
-
-  async uploadAudio(audioBlob) {
-    const formData = new FormData();
-    formData.append('file', audioBlob, 'recording.wav');
-    const r = await fetch(`${API_BASE_URL}/interview/upload-audio`, {
-      method: 'POST',
-      headers: withKey(),
-      body: formData,
-    });
-    return asJson(r);
-  },
-
-  async getPersonaReply(personaId, transcript, sessionId) {
-    const formData = new FormData();
-    formData.append('persona_id', String(personaId));
-    formData.append('transcript', transcript);
-    if (sessionId) formData.append('session_id', sessionId);
-    const r = await fetch(`${API_BASE_URL}/interview/persona-reply`, {
-      method: 'POST',
-      headers: withKey(),
-      body: formData,
-    });
-    return asJson(r);
-  },
-
-  async generateTTS(text, personaId) {
-    const formData = new FormData();
-    formData.append('text', text);
-    if (personaId) formData.append('persona_id', String(personaId));
-    const r = await fetch(`${API_BASE_URL}/interview/tts`, {
-      method: 'POST',
-      headers: withKey(),
-      body: formData,
-    });
-    return asJson(r); // expected to return { audio_url }
-  },
-
+   
   async startSession(personaId) {
     const formData = new FormData();
     formData.append('persona_id', String(personaId));
