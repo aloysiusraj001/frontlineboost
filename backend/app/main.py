@@ -7,7 +7,6 @@ import os
 from app.api.routes import health, persona, interview, feedback
 from app.utils.config import settings
 from app.api.routes import audio_chat
-app.include_router(audio_chat.router, prefix="/api/v1/audio", tags=["audio"])
 
 app = FastAPI(
     title="Student Empathy Interview Training Backend",
@@ -15,6 +14,8 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+app.include_router(audio_chat.router, prefix="/api/v1/audio", tags=["audio"])
 
 app.add_middleware(
     CORSMiddleware,
