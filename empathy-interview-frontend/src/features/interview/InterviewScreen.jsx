@@ -222,69 +222,16 @@ export default function InterviewScreen({
         setProcessing(false);
         return;
       }
-
-      // 1) STT
-      const { transcript } = await apiService.uploadAudio(audioBlob);
-      const text = (transcript || '').trim();
-      if (!text) {
-        setError('No speech detected. Please try again.');
-        setProcessing(false);
-        return;
-      }
-
-      // 2) Show USER bubble immediately
-      const turnId = makeTurnId();
-      const baseTurn = {
-        id: turnId,
-        student_question: text,
-        student_audio_url: userAudioUrl || null,
-        persona_response: '',
-        persona_audio_url: null,
-        timestamp: new Date().toISOString(),
-      };
-      setInterviewTurns((prev) => [...prev, baseTurn]);
-
-      // 3) Persona typing
-      setPersonaTyping(true);
-
-      // 4) Persona reply (requires session_id)
-      const replyResult = await apiService.getPersonaReply(persona.id, text, id);
-      const reply = (replyResult.reply || '').trim();
-
-      // 5) TTS - Updated to handle base64
-      let personaAudioUrl = null;
-      if (reply) {
-        const ttsResult = await apiService.generateTTS(reply, persona.id);
-        
-        // Handle base64 audio response
-        if (ttsResult.audio_base64) {
-          // Convert base64 to blob and create URL
-          const audioBlob = base64ToBlob(ttsResult.audio_base64, 'audio/mpeg');
-          personaAudioUrl = URL.createObjectURL(audioBlob);
-          
-          // Store the URL for cleanup later
-          userBlobUrlsRef.current.push(personaAudioUrl);
-        } else if (ttsResult.audio_url) {
-          // Fallback to URL if still available
-          personaAudioUrl = ttsResult.audio_url;
-        }
-      }
-
-      // 6) Patch the same turn by id
-      setInterviewTurns((prev) => {
-        const next = [...prev];
-        const idx = next.findIndex((t) => t.id === turnId);
-        if (idx !== -1) {
-          next[idx] = {
-            ...next[idx],
-            persona_response: reply,
-            persona_audio_url: personaAudioUrl,
-            turn_number: replyResult.turn_number || idx + 1,
-          };
-        }
-        return next;
-      });
-
+    
+      const result = await apiService.audioChatWithOpenAI(audioBlob, persona.id);
+// result: { audio_base64: "...", transcript: "...", ... } depending on backend
+      const audioBase64 = result.audio_base64;
+if (audioBase64) {
+  const audioBlob = base64ToBlob(audioBase64, 'audio/mpeg'); // Use your utility or existing fn
+  const audioUrl = URL.createObjectURL(audioBlob);
+  // call your playAudio(audioUrl, "...") logic as before
+}
+     
       // 7) Autoplay persona audio
       if (personaAudioUrl) await playAudio(personaAudioUrl, `p-${turnId}`);
     } catch (err) {
