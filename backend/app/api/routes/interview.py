@@ -1,7 +1,6 @@
 # backend\app\api\routes\interview.py
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, Form
 from app.utils.auth import api_key_auth
-# from app.services.assemblyai_service import assemblyai_service
 from app.services.audio_monitor import audio_monitor
 from app.services.openrouter_service import openrouter_service
 from app.services.elevenlabs_service import elevenlabs_service
@@ -132,7 +131,7 @@ async def upload_audio(
     
     try:
         # Pass to AssemblyAI wrapper
-        transcript_result = await assemblyai_service.transcribe_audio_file(audio_bytes)
+       # transcript_result = await assemblyai_service.transcribe_audio_file(audio_bytes)
         
         # Handle empty or unclear transcription
         if not transcript_result.transcript or len(transcript_result.transcript.strip()) < 3:
