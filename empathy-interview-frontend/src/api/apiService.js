@@ -25,10 +25,19 @@ async function asJson(res) {
 }
 
 export const apiService = {
-  async fetchPersonas() {
-    const r = await fetch(`${API_BASE_URL}/persona/list`, { headers: withKey() });
+  // ...other API functions...,
+  async audioChatWithOpenAI(audioBlob, personaId) {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'recording.wav');
+    if (personaId) formData.append('persona_id', String(personaId));
+    const r = await fetch(`${API_BASE_URL}/audio/chat`, {
+      method: 'POST',
+      headers: withKey(),
+      body: formData
+    });
     return asJson(r);
-  },
+  }
+},
    
   async startSession(personaId) {
     const formData = new FormData();
