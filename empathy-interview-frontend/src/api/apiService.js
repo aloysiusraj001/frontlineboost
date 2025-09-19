@@ -36,8 +36,7 @@ export const apiService = {
       body: formData
     });
     return asJson(r);
-  }
-},
+  },
    
   async startSession(personaId) {
     const formData = new FormData();
