@@ -413,8 +413,7 @@ async def reply_to_audio(
 
     from app.models.schemas import TTSRequest
     tts_req = TTSRequest(text=text, voice_id=voice_id, voice_settings=voice_settings, model_id=model_id) # <--add model_id
-   # tts_resp = await elevenlabs_service.text_to_speech(tts_req)
-
+  
     # Return the complete response including base64 audio
     return {
         "audio_base64": tts_resp.audio_base64,
