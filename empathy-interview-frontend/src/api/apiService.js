@@ -4,7 +4,7 @@ const API_KEY = import.meta.env.VITE_API_KEY ?? 'secret123';
 
 const withKey = (headers = {}) => ({ 'X-API-Key': API_KEY, ...headers });
 
-async audioChatWithOpenAI(audioBlob, personaId) {
+async audioChatWithOpenAI = (audioBlob, personaId) => {
   const formData = new FormData();
   formData.append('file', audioBlob, 'recording.wav');
   if (personaId) formData.append('persona_id', String(personaId));
