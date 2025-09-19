@@ -37,7 +37,11 @@ export const apiService = {
     });
     return asJson(r);
   },
-   
+  
+  async fetchPersonas() {
+    const r = await fetch(`${API_BASE_URL}/persona/list`, { headers: withKey() });
+    return asJson(r);
+  }, 
   async startSession(personaId) {
     const formData = new FormData();
     formData.append('persona_id', String(personaId));
