@@ -2,7 +2,6 @@
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, Form
 from app.utils.auth import api_key_auth
 from app.services.audio_monitor import audio_monitor
-from app.services.elevenlabs_service import elevenlabs_service
 from app.models.schemas import Persona, ChatMessage, ChatRequest
 import json
 import uuid
@@ -414,7 +413,7 @@ async def reply_to_audio(
 
     from app.models.schemas import TTSRequest
     tts_req = TTSRequest(text=text, voice_id=voice_id, voice_settings=voice_settings, model_id=model_id) # <--add model_id
-    tts_resp = await elevenlabs_service.text_to_speech(tts_req)
+   # tts_resp = await elevenlabs_service.text_to_speech(tts_req)
 
     # Return the complete response including base64 audio
     return {
