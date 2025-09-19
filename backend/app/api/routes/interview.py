@@ -2,7 +2,6 @@
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, Form
 from app.utils.auth import api_key_auth
 from app.services.audio_monitor import audio_monitor
-from app.services.openrouter_service import openrouter_service
 from app.services.elevenlabs_service import elevenlabs_service
 from app.models.schemas import Persona, ChatMessage, ChatRequest
 import json
@@ -322,7 +321,7 @@ async def persona_reply(
         try:
             chat_req = ChatRequest(messages=messages)
             chat_req.model = "deepseek/deepseek-chat-v3.1:free"
-            ai_reply = await openrouter_service.generate_text(chat_req)
+           # ai_reply = await openrouter_service.generate_text(chat_req)
             reply_text = (ai_reply.message or "").strip()
             if not reply_text:
                 reply_text = "Could you rephrase that? I want to make sure I answer you properly."
