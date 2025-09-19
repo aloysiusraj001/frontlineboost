@@ -1,10 +1,20 @@
-from fastapi import APIRouter, File, UploadFile, Form
-# import openai, your config, and add any persona logic/system prompt as needed
+from fastapi import APIRouter, UploadFile, File, Form
+import openai
+import os
+import base64
 
 router = APIRouter()
 
 @router.post("/chat")
 async def audio_chat(file: UploadFile = File(...), persona_id: str = Form(...)):
-    # Your OpenAI API logic here (audio in, persona prompt, audio out)
-    return {"audio_base64": audio_base64_result}  # or audio_url, as you implement
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
+    wav = await file.read()
 
+    # Prepare your system prompt/persona background here:
+    persona_prompt = "Your background/persona config"  # look up by persona_id
+
+    # Call OpenAI endpoint (pseudo, check the OpenAI docs for exact endpoint!)
+    response = openai.audio.chat(audio=wav, prompt=persona_prompt)
+    audio_content = response["audio"]
+    b64 = base64.b64encode(audio_content).decode("utf-8")
+    return {"audio_base64": b64}
