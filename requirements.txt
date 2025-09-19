@@ -6,4 +6,5 @@ aiohttp
 httpx
 python-multipart
 assemblyai
+openai
 # uvicorn  # optional for local dev only; not required on Vercel
