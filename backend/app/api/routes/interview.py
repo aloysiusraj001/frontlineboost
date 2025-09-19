@@ -1,7 +1,7 @@
 # backend\app\api\routes\interview.py
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, Form
 from app.utils.auth import api_key_auth
-from app.services.assemblyai_service import assemblyai_service
+# from app.services.assemblyai_service import assemblyai_service
 from app.services.audio_monitor import audio_monitor
 from app.services.openrouter_service import openrouter_service
 from app.services.elevenlabs_service import elevenlabs_service
